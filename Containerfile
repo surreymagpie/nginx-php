@@ -73,7 +73,6 @@ RUN echo 'extension=geos' > /etc/php82/conf.d/geos.ini
 
 # Init script
 COPY start.sh /start.sh
-RUN chmod +x /start.sh
 
 CMD /start.sh
 

@@ -71,9 +71,13 @@ COPY default.conf /etc/nginx/http.d/default.conf
 COPY --from=geos-build /tmp/php-geos/modules/geos.so /usr/lib/php82/modules/
 RUN echo 'extension=geos' > /etc/php82/conf.d/geos.ini
 
+# Install Composer
+COPY --from=docker.io/composer/composer:latest-bin /composer /usr/local/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN ln -s /usr/bin/php82 /usr/bin/php
+
 # Init script
 COPY start.sh /start.sh
-RUN chmod +x /start.sh
 
 CMD /start.sh
 

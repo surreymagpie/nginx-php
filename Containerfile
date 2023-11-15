@@ -84,5 +84,8 @@ RUN ln -s /usr/bin/php82 /usr/bin/php
 # Init script
 COPY start.sh /start.sh
 
-CMD /start.sh
+WORKDIR /var/www/html
 
+STOPSIGNAL SIGKILL
+
+CMD /start.sh

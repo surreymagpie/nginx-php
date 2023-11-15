@@ -23,8 +23,12 @@ FROM docker.io/alpine:latest
 EXPOSE 80 443
 
 RUN apk add --no-cache \
+	bash \
+	curl \
 	geos \
+	mariadb-client \
 	nginx \
+	openssh-client \
 	php82 \
 	php82-bcmath \
 	php82-calendar \
@@ -39,7 +43,7 @@ RUN apk add --no-cache \
 	php82-gettext \
 	php82-iconv \
 	php82-intl \
-  	php82-mysqli \
+	php82-mysqli \
 	php82-opcache \
 	php82-pcntl \
 	php82-pdo_mysql \
@@ -47,7 +51,7 @@ RUN apk add --no-cache \
 	php82-pecl-imagick \
 	php82-pecl-uploadprogress \
 	php82-phar \
-  	php82-posix \
+	php82-posix \
 	php82-session \
 	php82-shmop \
 	php82-simplexml \
@@ -62,7 +66,8 @@ RUN apk add --no-cache \
 	php82-xmlreader\
 	php82-tokenizer \
 	php82-xsl \
-	php82-zip
+	php82-zip \
+	rsync
 
 # Default nginx config
 COPY default.conf /etc/nginx/http.d/default.conf

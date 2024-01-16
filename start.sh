@@ -1,7 +1,7 @@
 #!/bin/sh
 
-#Start php-fpm
-/usr/sbin/php-fpm82 
+#Start php-fpm as root
+/usr/sbin/php-fpm82 -R
 
 # Start nginx
 /usr/sbin/nginx -g 'daemon off;'

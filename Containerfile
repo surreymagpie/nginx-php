@@ -71,6 +71,10 @@ RUN apk add --no-cache \
 
 # Default nginx config
 COPY default.conf /etc/nginx/http.d/default.conf
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Default php-fpm config
+COPY www.conf /etc/php82/php-fpm.d/www.conf
 
 # Copy artifact built in first stage
 COPY --from=geos-build /tmp/php-geos/modules/geos.so /usr/lib/php82/modules/

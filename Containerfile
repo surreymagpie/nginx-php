@@ -1,5 +1,5 @@
 # First build stage to compile Geos PHP extension
-FROM docker.io/alpine:latest AS geos-build
+FROM docker.io/alpine:3.19.0 AS geos-build
 
 RUN apk add --no-cache \
 	git \
@@ -8,7 +8,7 @@ RUN apk add --no-cache \
 	make \
 	php82-dev
 
-RUN ln -s /usr/bin/phpize82 /usr/bin/phpize
+# RUN ln -s /usr/bin/phpize82 /usr/bin/phpize
 
 RUN git clone https://git.osgeo.org/gitea/geos/php-geos.git /tmp/php-geos;
 WORKDIR /tmp/php-geos
@@ -18,7 +18,7 @@ RUN ./configure --with-php-config=/usr/bin/php-config82
 RUN make
 
 # Second stage to build working container image
-FROM docker.io/alpine:latest
+FROM docker.io/alpine:3.19.0
 
 EXPOSE 80 443
 
@@ -79,7 +79,7 @@ RUN echo 'extension=geos' > /etc/php82/conf.d/geos.ini
 # Install Composer
 COPY --from=docker.io/composer/composer:latest-bin /composer /usr/local/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
-RUN ln -s /usr/bin/php82 /usr/bin/php
+# RUN ln -s /usr/bin/php82 /usr/bin/php
 
 # Init script
 COPY start.sh /start.sh

@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "drupal7", "drupal9" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "drupal7", "drupal9" ]
   workflow_dispatch:
 
 jobs:
@@ -13,5 +13,28 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
     - name: Build the Docker image
       run: docker build . --file Containerfile --tag surreymagpie/nginx-php:$(date +%s)
+
+    - name: Add branch name to environment
+      run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+
+    - name: Build image
+      id: build
+      uses: redhat-actions/buildah-build@v2.12
+      with:
+        containerfiles: |
+          ./Containerfile
+        image: ${{ github.repository }}
+        tags: ${{ env.BRANCH }}
+        # labels: # optional
+
+    - name: Push To GHCR
+      uses: redhat-actions/push-to-registry@v2
+      with:
+        image: ${{ steps.build.outputs.image }}
+        tags: ${{ steps.build.outputs.tags }}
+        registry: ghcr.io/${{ github.actor}}
+        username: ${{ github.actor}}
+        password: ${{ secrets.GITHUB_TOKEN }}

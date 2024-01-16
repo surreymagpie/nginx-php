@@ -14,9 +14,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Build the Docker image
-      run: docker build . --file Containerfile --tag surreymagpie/nginx-php:$(date +%s)
-
     - name: Add branch name to environment
       run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
 
@@ -35,6 +32,6 @@ jobs:
       with:
         image: ${{ steps.build.outputs.image }}
         tags: ${{ steps.build.outputs.tags }}
-        registry: ghcr.io/${{ github.actor}}
+        registry: ghcr.io
         username: ${{ github.actor}}
         password: ${{ secrets.GITHUB_TOKEN }}

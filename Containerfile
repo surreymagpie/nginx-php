@@ -26,6 +26,7 @@ RUN apk add --no-cache \
 	bash \
 	curl \
 	geos \
+	gettext \
 	mariadb-client \
 	nginx \
 	openssh-client \
@@ -70,7 +71,7 @@ RUN apk add --no-cache \
 	rsync
 
 # Default nginx config
-COPY default.conf /etc/nginx/http.d/default.conf
+COPY default.template /etc/nginx/http.d/default.template
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Default php-fpm config

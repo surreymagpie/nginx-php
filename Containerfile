@@ -86,6 +86,11 @@ COPY --from=docker.io/composer/composer:latest-bin /composer /usr/local/bin/comp
 ENV COMPOSER_ALLOW_SUPERUSER=1
 # RUN ln -s /usr/bin/php82 /usr/bin/php
 
+# Install drush globally
+RUN wget https://github.com/drush-ops/drush/releases/download/8.4.12/drush.phar \
+	&& chmod +x drush.phar \
+	&& mv drush.phar /usr/local/bin/drush
+
 # Init script
 COPY start.sh /start.sh
 

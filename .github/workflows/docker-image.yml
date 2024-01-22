@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main", "drupal7", "drupal9" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "main", "drupal7", "drupal9" ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
@@ -14,9 +14,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Add branch name to environment
-      run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
-
     - name: Build image
       id: build
       uses: redhat-actions/buildah-build@v2.12
@@ -24,7 +21,7 @@ jobs:
         containerfiles: |
           ./Containerfile
         image: ${{ github.repository }}
-        tags: ${{ env.BRANCH }}
+        tags: latest
         # labels: # optional
 
     - name: Push To GHCR

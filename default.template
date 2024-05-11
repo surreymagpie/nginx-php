@@ -61,8 +61,9 @@ server {
                 fastcgi_intercept_errors on;
                 fastcgi_pass 127.0.0.1:9000;
         }
-        # This is for D7 and D8
-        location ~ ^/sites/.*/files/styles/ {
+        # This is for D7 and D10
+        # Passes image style and asset generation to PHP.
+        location ~ ^/sites/.*/files/(css|js|styles)/ {
                 try_files $uri @rewrite;
         }
 

@@ -1,0 +1,34 @@
+version: '3'
+
+services:
+  web:
+    image: ghcr.io/surreymagpie/nginx-php:latest
+    container_name: drupal10
+    ports:
+      - 8080:80
+    environment:
+      - WEBROOT=web
+    networks:
+      - drupal10
+    volumes:
+      - .:/var/www/html:Z,rw
+      # Optionally can mount your SSH keys so 
+      # container can communicate with remote sites
+      # - $HOME/.ssh:/root/.ssh:Z,rw
+
+  db:
+    image: docker.io/library/mariadb:10.6.16
+    container_name: mariadb
+    environment:
+      - MYSQL_USER=drupal10
+      - MYSQL_PASSWORD=drupal10
+      - MYSQL_DATABASE=drupal10
+      - MYSQL_ROOT_PASSWORD=drupal10
+    volumes:
+      - db-data:/var/lib/mysql
+
+volumes:
+  db-data:
+
+networks:
+  drupal10:

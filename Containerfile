@@ -27,6 +27,7 @@ RUN apk add --no-cache \
 	curl \
 	geos \
 	gettext \
+	git \
 	mariadb-client \
 	nginx \
 	openssh-client \

@@ -92,6 +92,11 @@ RUN wget https://github.com/drush-ops/drush/releases/download/8.4.12/drush.phar 
 	&& chmod +x drush.phar \
 	&& mv drush.phar /usr/local/bin/drush
 
+# Install Wordpress CLI
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+	&& chmod +x wp-cli.phar \
+	&& mv wp-cli.phar /usr/local/bin/wp
+
 # Init script
 COPY start.sh /start.sh
 

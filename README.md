@@ -39,7 +39,7 @@ podman run -it --rm \
 cd MY-NEW-PROJECT
 
 # Copy the `compose.yml` file from this repo into that directory and edit if required.
-wget https://github.com/surreymagpie/nginx-php/blob/main/drupal-compose.yml -O compose.yml
+wget https://raw.githubusercontent.com/surreymagpie/nginx-php/main/drupal-compose.yml -O compose.yml
 
 # Start your containers 
 podman compose up -d`
@@ -73,7 +73,7 @@ podman run -it --rm \
 cd MY-WORDPRESS
 
 # Download the `wordpress-compose.yml` file
-wget https://github.com/surreymagpie/nginx-php/blob/main/wordpress-compose.yml -O compose.yml
+wget https://raw.githubusercontent.com/surreymagpie/nginx-php/main/wordpress-compose.yml -O compose.yml
 
 # Start the containers
 podman compose up -d

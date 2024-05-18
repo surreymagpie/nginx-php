@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  web:
+    image: ghcr.io/surreymagpie/nginx-php:latest
+    container_name: wordpress
+    ports:
+      - 8080:80
+    networks:
+      - wordpress
+    volumes:
+      - .:/var/www/html:Z,rw
+
+  db:
+    image: docker.io/library/mariadb:10.6.16
+    container_name: mariadb
+    environment:
+      - MYSQL_USER=wordpress
+      - MYSQL_PASSWORD=wordpress
+      - MYSQL_DATABASE=wordpress
+      - MYSQL_ROOT_PASSWORD=wordpress
+    volumes:
+      - db-data:/var/lib/mysql
+
+  mailhog:
+    image: docker.io/mailhog/mailhog:latest
+    container_name: mailhog
+    ports:
+      - 1025:1025
+      - 8025:8025
+    # disable saving logs
+    logging:
+      driver: 'none'
+
+volumes:
+  db-data:
+
+networks:
+  wordpress:

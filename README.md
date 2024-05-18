@@ -22,38 +22,81 @@ podman run \
     ghcr.io/surreymagpie/nginx-php:latest
 
 ```
-Visiting [localhost:8080](http://localhost:8080) will display a `phpinfo()` screen.
+Visiting [localhost:8080][def] will display a `phpinfo()` screen.
 
 ## Creating a new Drupal project
 
-- Run the following command to create a new Drupal 10 project in a `MY-NEW-PROJECT` directory.
+- Run the following commands to create a new Drupal 10 project in a `MY-NEW-PROJECT` directory.
 
 ```bash
-    # Using a disposable container to create the project
-    podman run -it --rm \
-    -v .:/var/www/html:Z \
-    ghcr.io/surreymagpie/nginx-php \
-    /bin/bash -c 'composer create-project drupal/recommended-project MY-NEW-PROJECT'
-```
-- Enter the project directory `cd MY-NEW-PROJECT`
+# Using a disposable container to create the project
+podman run -it --rm \
+  -v .:/var/www/html:Z \
+  ghcr.io/surreymagpie/nginx-php:latest \
+  /bin/bash -c 'composer create-project drupal/recommended-project MY-NEW-PROJECT'
 
-- Copy the `compose.yml` file from this repo into that directory and edit if required.
+# Enter the project directory
+cd MY-NEW-PROJECT
 
-- Start your containers with `podman compose up -d`
+# Copy the `compose.yml` file from this repo into that directory and edit if required.
+wget https://github.com/surreymagpie/nginx-php/blob/main/drupal-compose.yml -O compose.yml
 
-- **Recommended:**
-    add `drush` to you project with
-    `podman exec -it drupal10 composer require drush/drush`
+# Start your containers 
+podman compose up -d`
 
-- Visit [localhost:8080](http://localhost:8080) in your browser to install,
-or use `podman exec -it drupal10 vendor/bin/drush site:install`.
-The database credentials are all `drupal10` and the hostname is `db`.
-
-## Aliases
-
-The following aliases are very useful for interacting with the project as if they were natively on your host machine, rather than using lengthy `podman exec` commands.
-
-```
+# The following aliases are very useful for interacting with the project as if they
+# were natively on your host machine, rather than using lengthy 'podman exec' commands.
 alias composer='podman exec -it drupal10 composer'
-alias drush='podman exec -it drupal10 vendor/bin/drush'
+alias drush='podman exec -it drupal10 drush'
+
+# **Recommended:** add 'drush' to you project with:
+composer require drush/drush
+
+# Install the site
+drush site:install standard \
+  --locale=en-gb \
+  --db-url=mysql://drupal10:drupal10@db:3306/drupal10
 ```
+- The site is accessible at [localhost:8080][def]
+- Email is intercepted locally by Mailhog and is accessed on [localhost:8025][def2]
+
+## Starting a Wordpress project
+In a similar fashion, a wordpress installation can be rapidly created.
+
+````bash
+# Download the code base
+podman run -it --rm \
+  -v .:/var/www/html:Z \
+  ghcr.io/surreymagpie/nginx-php:latest \
+  wp core download --allow-root --locale=en_GB --path=MY-WORDPRESS
+
+cd MY-WORDPRESS
+
+# Download the `wordpress-compose.yml` file
+wget https://github.com/surreymagpie/nginx-php/blob/main/wordpress-compose.yml -O compose.yml
+
+# Start the containers
+podman compose up -d
+
+# Apply the alias
+alias wp='podman exec -it wordpress wp --allow-root'
+
+# Create a config file
+wp config create \
+  --dbname=wordpress \
+  --dbuser=wordpress \
+  --dbpass=wordpress \
+  --dbhost=db
+
+# Install Wordpress
+wp core install \
+  --url=localhost:8080 \
+  --title='Wordpress Test' \
+  --admin_user=admin \
+  --admin_email=admin@example.com
+````
+
+Again, visit [localhost:8080][def] to access the web UI.
+
+[def]: http://localhost:8080
+[def2]: http://localhost:8025

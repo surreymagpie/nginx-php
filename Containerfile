@@ -97,6 +97,9 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 	&& chmod +x wp-cli.phar \
 	&& mv wp-cli.phar /usr/local/bin/wp
 
+# Support Mailhog for email testing
+RUN sed -i 's/;sendmail_path =/sendmail_path = \/usr\/sbin\/sendmail -S mailhog:1025/' /etc/php82/php.ini 
+
 # Init script
 COPY start.sh /start.sh
 

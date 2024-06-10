@@ -100,6 +100,9 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 # Support Mailhog for email testing
 RUN sed -i 's/;sendmail_path =/sendmail_path = \/usr\/sbin\/sendmail -S mailhog:1025/' /etc/php82/php.ini 
 
+# Increase PHP memory to 256M
+RUN sed -i "s/^memory_limit\ =\ 128M/memory_limit\ =\ 256M/" /etc/php82/php.ini
+
 # Init script
 COPY start.sh /start.sh
 

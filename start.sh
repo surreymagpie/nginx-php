@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Start php-fpm as root
-/usr/sbin/php-fpm82 -R
+/usr/sbin/php-fpm83 -R
 
 # If WEBROOT variable is unset or empty, set the default root directory.
 # Otherwise append the subdirectory path to the default.

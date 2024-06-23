@@ -6,15 +6,15 @@ RUN apk add --no-cache \
 	geos-dev \
 	g++ \
 	make \
-	php82-dev
+	php83-dev
 
-# RUN ln -s /usr/bin/phpize82 /usr/bin/phpize
+RUN ln -s /usr/bin/phpize83 /usr/bin/phpize
 
 RUN git clone https://git.osgeo.org/gitea/geos/php-geos.git /tmp/php-geos;
 WORKDIR /tmp/php-geos
 
 RUN ./autogen.sh
-RUN ./configure --with-php-config=/usr/bin/php-config82
+RUN ./configure --with-php-config=/usr/bin/php-config83
 RUN make
 
 # Second stage to build working container image
@@ -31,44 +31,44 @@ RUN apk add --no-cache \
 	mariadb-client \
 	nginx \
 	openssh-client \
-	php82 \
-	php82-bcmath \
-	php82-calendar \
-	php82-curl \
-	php82-ctype \
-	php82-exif \
-	php82-ffi \
-	php82-fileinfo \
-	php82-fpm \
-	php82-ftp \
-	php82-gd \
-	php82-gettext \
-	php82-iconv \
-	php82-intl \
-	php82-mysqli \
-	php82-opcache \
-	php82-pcntl \
-	php82-pdo_mysql \
-	php82-pecl-apcu \
-	php82-pecl-imagick \
-	php82-pecl-uploadprogress \
-	php82-phar \
-	php82-posix \
-	php82-session \
-	php82-shmop \
-	php82-simplexml \
-	php82-sockets \
-	php82-sodium \
-	php82-sysvmsg \
-	php82-sysvsem \
-	php82-sysvshm \
-	php82-tokenizer \
-	php82-xml \
-	php82-xmlwriter \
-	php82-xmlreader\
-	php82-tokenizer \
-	php82-xsl \
-	php82-zip \
+	php83 \
+	php83-bcmath \
+	php83-calendar \
+	php83-curl \
+	php83-ctype \
+	php83-exif \
+	php83-ffi \
+	php83-fileinfo \
+	php83-fpm \
+	php83-ftp \
+	php83-gd \
+	php83-gettext \
+	php83-iconv \
+	php83-intl \
+	php83-mysqli \
+	php83-opcache \
+	php83-pcntl \
+	php83-pdo_mysql \
+	php83-pecl-apcu \
+	php83-pecl-imagick \
+	php83-pecl-uploadprogress \
+	php83-phar \
+	php83-posix \
+	php83-session \
+	php83-shmop \
+	php83-simplexml \
+	php83-sockets \
+	php83-sodium \
+	php83-sysvmsg \
+	php83-sysvsem \
+	php83-sysvshm \
+	php83-tokenizer \
+	php83-xml \
+	php83-xmlwriter \
+	php83-xmlreader\
+	php83-tokenizer \
+	php83-xsl \
+	php83-zip \
 	rsync
 
 # Default nginx config
@@ -76,16 +76,16 @@ COPY default.template /etc/nginx/http.d/default.template
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Default php-fpm config
-COPY www.conf /etc/php82/php-fpm.d/www.conf
+COPY www.conf /etc/php83/php-fpm.d/www.conf
 
 # Copy artifact built in first stage
-COPY --from=geos-build /tmp/php-geos/modules/geos.so /usr/lib/php82/modules/
-RUN echo 'extension=geos' > /etc/php82/conf.d/geos.ini
+COPY --from=geos-build /tmp/php-geos/modules/geos.so /usr/lib/php83/modules/
+RUN echo 'extension=geos' > /etc/php83/conf.d/geos.ini
 
 # Install Composer
 COPY --from=docker.io/composer/composer:latest-bin /composer /usr/local/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
-# RUN ln -s /usr/bin/php82 /usr/bin/php
+# RUN ln -s /usr/bin/php83 /usr/bin/php
 
 # Install drush globally
 RUN wget https://github.com/drush-ops/drush/releases/download/8.4.12/drush.phar \
@@ -98,10 +98,10 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 	&& mv wp-cli.phar /usr/local/bin/wp
 
 # Support Mailhog for email testing
-RUN sed -i 's/;sendmail_path =/sendmail_path = \/usr\/sbin\/sendmail -S mailhog:1025/' /etc/php82/php.ini 
+RUN sed -i 's/;sendmail_path =/sendmail_path = \/usr\/sbin\/sendmail -S mailhog:1025/' /etc/php83/php.ini 
 
 # Increase PHP memory to 256M
-RUN sed -i "s/^memory_limit\ =\ 128M/memory_limit\ =\ 256M/" /etc/php82/php.ini
+RUN sed -i "s/^memory_limit\ =\ 128M/memory_limit\ =\ 256M/" /etc/php83/php.ini
 
 # Init script
 COPY start.sh /start.sh

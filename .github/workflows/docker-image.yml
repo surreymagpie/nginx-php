@@ -1,8 +1,5 @@
 name: Docker Image CI
 
-env:
-  BRANCH: GITHUB_REF##*/
-
 on:
   push:
     branches: 
@@ -30,7 +27,7 @@ jobs:
         containerfiles: |
           ./Containerfile
         image: ${{ github.repository }}
-        tags: ${{ env.BRANCH }}
+        tags: ${{ github.ref_name }}
         # labels: # optional
 
     - name: Push To GHCR

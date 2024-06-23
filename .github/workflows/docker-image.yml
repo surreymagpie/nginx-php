@@ -20,9 +20,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-      if: ${{  github.event_name == 'pull_request'}}
-      env:
-        branch_tag: 'dev'
+    - name: Set Image tag string for PR
+      id: image_tag
+      if: ${{ github.event_name == 'pull_request' }}
+      run: echo "tag=dev" >> "$GITHUB_OUTPUT"
 
     - name: Build image
       id: build
@@ -31,7 +32,7 @@ jobs:
         containerfiles: |
           ./Containerfile
         image: ${{ github.repository }}
-        tags: ${{ env.branch_tag || github.ref_name }}
+        tags: ${{ steps.image_tag.outputs.tag || github.ref_name }}
 
     - name: Push To GHCR
       uses: redhat-actions/push-to-registry@v2

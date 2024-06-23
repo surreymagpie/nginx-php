@@ -1,10 +1,19 @@
 name: Docker Image CI
 
+env:
+  BRANCH: GITHUB_REF##*/
+
 on:
   push:
-    branches: [ "main" ]
+    branches: 
+      - "8.2"
+      - "8.3"
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - "main"
+  # schedule:
+  #   # At 02:00 on first day-of-each month
+  #   - cron: "0 2 1 * *" 
   workflow_dispatch:
 
 jobs:
@@ -21,7 +30,7 @@ jobs:
         containerfiles: |
           ./Containerfile
         image: ${{ github.repository }}
-        tags: latest
+        tags: ${{ env.BRANCH }}
         # labels: # optional
 
     - name: Push To GHCR

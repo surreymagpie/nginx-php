@@ -85,7 +85,7 @@ RUN echo 'extension=geos' > /etc/php83/conf.d/geos.ini
 # Install Composer
 COPY --from=docker.io/composer/composer:latest-bin /composer /usr/local/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
-# RUN ln -s /usr/bin/php83 /usr/bin/php
+RUN ln -s /usr/bin/php83 /usr/bin/php
 
 # Install drush globally
 RUN wget https://github.com/drush-ops/drush/releases/download/8.4.12/drush.phar \
